@@ -5,40 +5,30 @@ const router = express.Router()
 const { v4: uuidv4} = require("uuid") 
 // importando a biblioteca uuid
 
+const conectaBD = require("./bd")
+// ligando ao arquivo bd
+conectaBD()
+// chamando a função que conecta o banco de dados
+
+const Mulher = require("./model")
 const app = express() 
 // iniciando o app
 app.use(express.json())
 const porta = 3333 
 // criando a porta
 
-// criando a lista inicial de mulheres
-const mulheres = [
- {
-   id: "1",
-   nome: 'Simara Conceição',
-   imagem: 'https://bit.ly/3LJIyOF',
-   minibio: 'Desenvolvedora e instrutora',
- },
-
- {
-   id: "2",
-   nome: 'Iana Chan',
-   imagem: 'https://bit.ly/3JCXBqP',
-   minibio: 'CEO & Founder da PrograMaria',
- },
-
- {
-   id: "3",
-   nome: 'Luana Pimentel',
-   imagem: 'https://bit.ly/3FKpFaz',
-   minibio: 'Senior Staff Software Engineer',
- }
-
-]
 
 //GET
-function mostraMulheres(request, response) {
-    response.json(mulheres)
+async function mostraMulheres(request, response) {
+    try {
+      const mulheres_vindas_do_bd = await Mulher.find()
+
+      response.json(mulheres_vindas_do_bd)
+
+    }catch (erro) {
+      console.log(erro)
+
+    }
 }
 
 //POST
